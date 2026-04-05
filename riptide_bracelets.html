@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Riptide Bracelets — by Emma</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --teal:    #00d4c8;
+      --coral:   #ff6b6b;
+      --yellow:  #ffe156;
+      --navy:    #0d1f2d;
+      --mid:     #152535;
+      --card-bg: #192c3b;
+      --white:   #f0f4f8;
+      --muted:   #8ba5b8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Cursor */
+    .cursor {
+      width: 18px; height: 18px;
+      background: var(--teal);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform .15s ease;
+      mix-blend-mode: difference;
+    }
+
+    /* Noise */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: .4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(13,31,45,.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem; letter-spacing: .08em;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--teal); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid; place-items: center;
+      text-align: center;
+      position: relative; padding: 2rem; overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,212,200,.12);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      animation: ring 4s ease-in-out infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+    @keyframes ring {
+      0%,100% { transform: translate(-50%,-50%) scale(1); opacity:.4; }
+      50%      { transform: translate(-50%,-50%) scale(1.15); opacity:.1; }
+    }
+    .hero-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: .7rem; letter-spacing: .25em;
+      color: var(--teal); text-transform: uppercase;
+      background: rgba(0,212,200,.08);
+      border: 1px solid rgba(0,212,200,.25);
+      padding: .35rem 1rem; border-radius: 100px;
+      display: inline-block; margin-bottom: 1.5rem;
+      animation: fadeUp .8s .2s both;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 14vw, 12rem);
+      line-height: .9; letter-spacing: .02em;
+      animation: fadeUp .8s .35s both;
+    }
+    .hero-title span { color: var(--teal); display: block; }
+    .hero-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(.75rem, 1.5vw, 1rem);
+      color: var(--muted); margin-top: 1.2rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      animation: fadeUp .8s .5s both;
+    }
+    .hero-prices {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 2rem; animation: fadeUp .8s .65s both;
+    }
+    .price-tag {
+      background: var(--card-bg);
+      border: 1px solid rgba(0,212,200,.2);
+      border-radius: 12px; padding: .6rem 1.4rem;
+      font-family: 'Space Mono', monospace; font-size: .85rem;
+    }
+    .price-tag strong { color: var(--yellow); }
+    .hero-cta { margin-top: 2.5rem; animation: fadeUp .8s .8s both; position: relative; z-index: 2; }
+    .hero-cta .btn, .hero-cta button { cursor: pointer; pointer-events: all; }
+    .btn {
+      display: inline-block; background: var(--teal);
+      color: var(--navy); font-family: 'Space Mono', monospace;
+      font-weight: 700; font-size: .85rem; letter-spacing: .1em;
+      text-transform: uppercase; padding: .9rem 2.2rem;
+      border-radius: 8px; text-decoration: none; border: none; cursor: pointer;
+      transition: background .2s, transform .15s, box-shadow .2s;
+    }
+    .btn:hover { background: var(--yellow); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,200,.3); }
+    .btn-outline {
+      background: transparent; border: 1.5px solid var(--teal);
+      color: var(--teal); margin-left: .75rem;
+    }
+    .btn-outline:hover { background: var(--teal); color: var(--navy); }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Space Mono', monospace; font-size: .65rem;
+      letter-spacing: .2em; color: var(--muted); text-transform: uppercase;
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      animation: fadeUp .8s 1.2s both;
+    }
+    .scroll-hint::after {
+      content: ''; width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%,100% { transform: scaleY(1) translateY(0); opacity: 1; }
+      50%      { transform: scaleY(.5) translateY(10px); opacity: .4; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTION COMMON */
+    section { position: relative; z-index: 1; }
+    .section-label {
+      font-family: 'Space Mono', monospace; font-size: .65rem;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: .6rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 1; margin-bottom: 2.5rem;
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      overflow: hidden; background: var(--teal);
+      padding: .65rem 0; position: relative; z-index: 1;
+    }
+    .marquee-track {
+      display: flex; gap: 0; width: max-content;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: .08em;
+      color: var(--navy); padding: 0 1.5rem; white-space: nowrap;
+    }
+    .marquee-item span { color: rgba(13,31,45,.4); margin-left: .5rem; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* GALLERY */
+    .gallery-section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+    .gallery-item:nth-child(1) { grid-column: 1 / 6; grid-row: 1 / 3; }
+    .gallery-item:nth-child(2) { grid-column: 6 / 9; grid-row: 1 / 2; }
+    .gallery-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 2; }
+    .gallery-item:nth-child(4) { grid-column: 6 / 10; grid-row: 2 / 3; }
+    .gallery-item:nth-child(5) { grid-column: 10 / 13; grid-row: 2 / 3; }
+    .gallery-item {
+      border-radius: 16px; overflow: hidden;
+      position: relative; cursor: pointer;
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,.05);
+      min-height: 220px;
+    }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,31,45,.85) 0%, transparent 55%);
+      display: flex; align-items: flex-end; padding: 1.2rem;
+      opacity: 0; transition: opacity .3s;
+    }
+    .gallery-item:hover .overlay { opacity: 1; }
+    .overlay-text {
+      font-family: 'Space Mono', monospace; font-size: .75rem;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--teal);
+    }
+    .tag {
+      position: absolute; top: .75rem; left: .75rem;
+      font-family: 'Space Mono', monospace; font-size: .65rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .75rem; border-radius: 100px;
+      background: rgba(13,31,45,.75); backdrop-filter: blur(8px);
+    }
+    .tag-available { color: var(--teal); border: 1px solid rgba(0,212,200,.35); }
+    .tag-custom    { color: var(--yellow); border: 1px solid rgba(255,225,86,.35); }
+
+    /* Bracelet placeholder SVGs */
+    .bracelet-placeholder {
+      width: 100%; height: 100%; min-height: 220px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--card-bg);
+    }
+    .bracelet-placeholder svg { width: 80%; height: 80%; max-width: 160px; }
+
+    /* HOW IT WORKS */
+    .how-section { padding: 6rem 2rem; background: var(--mid); }
+    .how-inner { max-width: 900px; margin: 0 auto; }
+    .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .step {
+      background: var(--card-bg); border-radius: 16px;
+      padding: 2rem; border: 1px solid rgba(255,255,255,.05);
+    }
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+      color: var(--teal); opacity: .3; line-height: 1; margin-bottom: .5rem;
+    }
+    .step h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; margin-bottom: .5rem; }
+    .step p  { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* CONTACT */
+    .contact-section {
+      padding: 6rem 2rem; text-align: center; max-width: 700px; margin: 0 auto;
+    }
+    .contact-card {
+      background: var(--card-bg); border-radius: 20px;
+      padding: 3rem 2.5rem; border: 1px solid rgba(255,255,255,.06);
+      margin-top: 1rem;
+    }
+    .contact-note {
+      margin-top: 1.5rem; font-size: .85rem;
+      color: var(--muted); line-height: 1.7;
+    }
+    .contact-social {
+      margin-top: 1.5rem; font-family: 'Space Mono', monospace;
+      font-size: .8rem; letter-spacing: .15em; color: var(--teal);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy); border-top: 1px solid rgba(255,255,255,.05);
+      padding: 3rem 2rem; text-align: center;
+      font-family: 'Space Mono', monospace; font-size: .7rem;
+      color: var(--muted); letter-spacing: .08em;
+    }
+
+    /* ============================================================
+       ORDER MODAL (Standard)
+    ============================================================ */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(7,18,28,.85);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--card-bg);
+      border: 1px solid rgba(0,212,200,.2);
+      border-radius: 20px;
+      width: 100%; max-width: 440px;
+      padding: 2rem;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform .3s;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1.2rem;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.2rem; cursor: pointer; line-height: 1;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-img {
+      width: 100%; height: 180px; object-fit: cover;
+      border-radius: 12px; margin-bottom: 1.2rem;
+      display: block;
+    }
+    .modal-img.hidden { display: none; }
+    .modal-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+      color: var(--white); letter-spacing: .04em; margin-bottom: .2rem;
+    }
+    .modal-price {
+      font-family: 'Space Mono', monospace; font-size: .75rem;
+      color: var(--teal); letter-spacing: .1em; margin-bottom: 1.4rem;
+    }
+    .modal-question {
+      font-family: 'Space Mono', monospace; font-size: .75rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1rem;
+    }
+
+    /* Form inputs */
+    .form-row { margin-bottom: 1.1rem; }
+    .form-row label {
+      display: block;
+      font-family: 'Space Mono', monospace; font-size: .65rem;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: .4rem;
+    }
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%; padding: .75rem 1rem;
+      background: rgba(255,255,255,.06);
+      border: 1.5px solid rgba(0,212,200,.18);
+      border-radius: 10px;
+      color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .95rem;
+      outline: none; transition: border-color .2s;
+    }
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus { border-color: var(--teal); }
+    .form-row select option { background: var(--navy); }
+    .form-row textarea { resize: vertical; min-height: 80px; }
+    .form-row input::placeholder,
+    .form-row textarea::placeholder { color: var(--muted); }
+
+    /* Pay buttons */
+    .pay-buttons { display: flex; gap: .75rem; margin-top: .5rem; }
+    .pay-btn {
+      flex: 1; padding: .85rem; border-radius: 10px;
+      font-family: 'Space Mono', monospace; font-weight: 700;
+      font-size: .8rem; letter-spacing: .06em; cursor: pointer;
+      border: 1.5px solid transparent; transition: all .2s;
+    }
+    .pay-btn.cash  { background: rgba(255,225,86,.1); border-color: rgba(255,225,86,.3); color: var(--yellow); }
+    .pay-btn.venmo { background: rgba(61,149,206,.1); border-color: rgba(61,149,206,.3); color: #3d95ce; }
+    .pay-btn.cash:hover  { background: rgba(255,225,86,.2); }
+    .pay-btn.venmo:hover { background: rgba(61,149,206,.2); }
+
+    .hidden  { display: none !important; }
+    .visible { display: block !important; }
+
+    .confirm-step { display: none; text-align: center; padding: 1rem 0; }
+    .confirm-step.visible { display: block; }
+    .confirm-icon  { font-size: 3rem; margin-bottom: .75rem; }
+    .confirm-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+      letter-spacing: .05em; margin-bottom: .75rem;
+    }
+    .confirm-text  { color: var(--muted); font-size: .9rem; line-height: 1.7; }
+    .back-btn {
+      margin-top: 1.4rem; background: none; border: 1.5px solid rgba(255,255,255,.1);
+      color: var(--muted); padding: .6rem 1.4rem; border-radius: 8px;
+      font-family: 'Space Mono', monospace; font-size: .72rem;
+      letter-spacing: .08em; cursor: pointer; transition: border-color .2s, color .2s;
+    }
+    .back-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* ============================================================
+       CUSTOM ORDER MODAL
+    ============================================================ */
+    .color-swatches {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: .25rem;
+    }
+    .swatch {
+      width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer; border: 3px solid transparent;
+      transition: transform .2s, border-color .2s; position: relative;
+    }
+    .swatch:hover { transform: scale(1.15); }
+    .swatch.sel { border-color: var(--teal); transform: scale(1.1); }
+    .swatch.sel::after {
+      content: '✓'; position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 12px; font-weight: bold;
+      text-shadow: 0 1px 3px rgba(0,0,0,.6);
+    }
+    .thickness-opts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: .25rem; }
+    .thick-opt {
+      flex: 1; min-width: 60px; text-align: center;
+      padding: 10px 6px;
+      border: 1.5px solid rgba(0,212,200,.18); border-radius: 10px;
+      cursor: pointer; background: rgba(255,255,255,.04);
+      transition: all .2s; font-size: 12px; color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+    .thick-opt:hover { border-color: var(--teal); }
+    .thick-opt.sel { border-color: var(--teal); background: rgba(0,212,200,.08); color: var(--teal); }
+    .thick-line {
+      height: 3px; background: var(--muted); border-radius: 2px;
+      margin: 5px auto 4px;
+    }
+    .thick-opt.sel .thick-line { background: var(--teal); }
+
+    .submit-btn {
+      width: 100%; margin-top: 1.2rem;
+      padding: .9rem; background: var(--teal); border: none;
+      color: var(--navy); font-family: 'Space Mono', monospace;
+      font-weight: 700; font-size: .85rem; letter-spacing: .1em;
+      text-transform: uppercase; border-radius: 10px;
+      cursor: pointer; transition: background .2s, transform .1s;
+    }
+    .submit-btn:hover { background: var(--yellow); transform: translateY(-1px); }
+
+    /* ============= RESPONSIVE ============= */
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:nth-child(1) { grid-column: 1 / 3; }
+      .gallery-item:nth-child(2) { grid-column: 1 / 2; }
+      .gallery-item:nth-child(3) { grid-column: 2 / 3; }
+      .gallery-item:nth-child(4) { grid-column: 1 / 2; }
+      .gallery-item:nth-child(5) { grid-column: 2 / 3; }
+      .steps { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#" style="display:flex;align-items:center;gap:.6rem;">
+    <svg width="38" height="38" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+      <defs><clipPath id="navclip"><circle cx="120" cy="120" r="103"/></clipPath></defs>
+      <circle cx="120" cy="120" r="120" fill="#00d4c8"/>
+      <circle cx="120" cy="120" r="105" fill="#0d1f2d"/>
+      <path d="M15 135 Q55 100 95 135 Q135 170 175 135 Q215 100 245 115 L245 240 L15 240 Z" fill="#00d4c8" opacity="0.18" clip-path="url(#navclip)"/>
+      <path d="M15 135 Q55 100 95 135 Q135 170 175 135 Q215 100 245 115" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" clip-path="url(#navclip)"/>
+      <path d="M15 152 Q55 117 95 152 Q135 187 175 152 Q215 117 245 132" fill="none" stroke="#00d4c8" stroke-width="4" stroke-linecap="round" stroke-dasharray="12,8" clip-path="url(#navclip)"/>
+      <text x="120" y="108" font-family="Georgia,serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="2">RIPTIDE</text>
+      <text x="120" y="195" font-family="Arial,sans-serif" font-size="16" fill="#00d4c8" text-anchor="middle" letter-spacing="4">BRACELETS</text>
+    </svg>
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.08em;"><span style="color:var(--teal);">Riptide</span> Bracelets</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#order">Order</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div style="display:flex;justify-content:center;margin-bottom:1.5rem;animation:fadeUp .8s .1s both;">
+      <svg width="140" height="140" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 24px rgba(0,212,200,.35));">
+        <defs><clipPath id="heroclip"><circle cx="120" cy="120" r="103"/></clipPath></defs>
+        <circle cx="120" cy="120" r="120" fill="#00d4c8"/>
+        <circle cx="120" cy="120" r="105" fill="#0d1f2d"/>
+        <path d="M15 135 Q55 100 95 135 Q135 170 175 135 Q215 100 245 115 L245 240 L15 240 Z" fill="#00d4c8" opacity="0.18" clip-path="url(#heroclip)"/>
+        <path d="M15 135 Q55 100 95 135 Q135 170 175 135 Q215 100 245 115" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" clip-path="url(#heroclip)"/>
+        <path d="M15 152 Q55 117 95 152 Q135 187 175 152 Q215 117 245 132" fill="none" stroke="#00d4c8" stroke-width="4" stroke-linecap="round" stroke-dasharray="12,8" clip-path="url(#heroclip)"/>
+        <circle cx="120" cy="120" r="120" fill="none" stroke="#00d4c8" stroke-width="0"/>
+        <text x="120" y="108" font-family="Georgia,serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="2">RIPTIDE</text>
+        <text x="120" y="195" font-family="Arial,sans-serif" font-size="16" fill="#00d4c8" text-anchor="middle" letter-spacing="4">BRACELETS</text>
+      </svg>
+    </div>
+    <div class="hero-badge">✦ Handmade by Emma ✦</div>
+    <h1 class="hero-title">RIPTIDE<span>BRACELETS</span></h1>
+    <p class="hero-sub">Handcrafted · one at a time · for you</p>
+    <div class="hero-prices">
+      <div class="price-tag">Standard <strong>$2</strong></div>
+      <div class="price-tag">Larger Styles <strong>$3</strong></div>
+      <div class="price-tag">Custom <strong>Your Design</strong></div>
+    </div>
+    <div class="hero-cta">
+      <a class="btn" href="#shop" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'}); return false;">Shop Now</a>
+      <button class="btn btn-outline" onclick="openCustomModal()">Go Custom</button>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Handmade <span>✦</span></span>
+    <span class="marquee-item">Ocean Vibes <span>✦</span></span>
+    <span class="marquee-item">Custom Colors <span>✦</span></span>
+    <span class="marquee-item">$2 & $3 Only <span>✦</span></span>
+    <span class="marquee-item">Made with Love <span>✦</span></span>
+    <span class="marquee-item">Riptide Bracelets <span>✦</span></span>
+    <span class="marquee-item">Handmade <span>✦</span></span>
+    <span class="marquee-item">Ocean Vibes <span>✦</span></span>
+    <span class="marquee-item">Custom Colors <span>✦</span></span>
+    <span class="marquee-item">$2 & $3 Only <span>✦</span></span>
+    <span class="marquee-item">Made with Love <span>✦</span></span>
+    <span class="marquee-item">Riptide Bracelets <span>✦</span></span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="how-inner">
+    <p class="section-label">Simple Process</p>
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Browse the Collection</h3>
+        <p>Scroll through Emma's current bracelets and pick your favorite — or come with your own vision.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Tap to Order</h3>
+        <p>Click any bracelet, enter your name, choose how you want to pay — Cash or Venmo — and you're done!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="shop">
+  <p class="section-label">Current Collection</p>
+  <h2 class="section-title">Shop the Drop</h2>
+
+  <div class="gallery-grid">
+
+    <!-- Photo 1 — Purple & Pink Twist on wrist -->
+    <div class="gallery-item" data-name="Purple &amp; Pink Twist" data-price="$2">
+      <img src="IMG_8025.jpeg" alt="Purple and pink twist bracelet on wrist">
+      <div class="tag tag-available">$2 — Available</div>
+      <div class="overlay"><span class="overlay-text">Tap to order →</span></div>
+    </div>
+
+    <!-- Photo 2 — Green Chevron flat lay -->
+    <div class="gallery-item" data-name="Green Chevron" data-price="$3">
+      <img src="IMG_8022.jpeg" alt="Green chevron RT bracelet">
+      <div class="tag tag-available">$3 — Available</div>
+      <div class="overlay"><span class="overlay-text">Tap to order →</span></div>
+    </div>
+
+    <!-- Photo 3 — Classic Blue RT flat lay -->
+    <div class="gallery-item" data-name="Classic Blue RT" data-price="$2">
+      <img src="IMG_8023.jpeg" alt="Classic blue RT bracelet">
+      <div class="tag tag-available">$2 — Available</div>
+      <div class="overlay"><span class="overlay-text">Tap to order →</span></div>
+    </div>
+
+    <!-- Photo 4 — Blue & Gold Twist on wrist -->
+    <div class="gallery-item" data-name="Blue &amp; Gold Twist" data-price="$2">
+      <img src="IMG_8018.jpeg" alt="Blue and gold twist bracelet on wrist">
+      <div class="tag tag-available">$2 — Available</div>
+      <div class="overlay"><span class="overlay-text">Tap to order →</span></div>
+    </div>
+
+    <!-- Photo 5 — Pink & Yellow Wave on wrist -->
+    <div class="gallery-item" data-name="Pink &amp; Yellow Wave" data-price="$3">
+      <img src="IMG_8015.jpeg" alt="Pink and yellow wave bracelet on wrist">
+      <div class="tag tag-custom">$3 — Available</div>
+      <div class="overlay"><span class="overlay-text">Tap to order →</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="order">
+  <p class="section-label">Get Yours</p>
+  <h2 class="section-title">Order or Go Custom</h2>
+  <div class="contact-card">
+    <p style="color:var(--muted); font-size:.95rem; line-height:1.7;">
+      Want one of Emma's current bracelets, or dreaming of something totally unique?
+      Tap any bracelet to order — or click below for a fully custom design.
+    </p>
+    <div style="margin-top:1.5rem;">
+      <button class="btn" onclick="openCustomModal()">Design a Custom Bracelet ✦</button>
+    </div>
+    <p class="contact-note">
+      Include: which bracelet (or custom details), your name, and how you'll pick it up.<br/>
+      <strong>$2 standard · $3 larger styles</strong> — Payment on pickup!
+    </p>
+    <p class="contact-social">✦ Find us @riptidebracelets ✦</p>
+  </div>
+</section>
+
+<!-- MARQUEE 2 -->
+<div class="marquee-wrap" style="background:var(--coral);">
+  <div class="marquee-track" style="animation-direction:reverse;">
+    <span class="marquee-item">Order Now <span>✦</span></span>
+    <span class="marquee-item">Custom Colors <span>✦</span></span>
+    <span class="marquee-item">Handmade by Emma <span>✦</span></span>
+    <span class="marquee-item">$2 &amp; $3 Only <span>✦</span></span>
+    <span class="marquee-item">Order Now <span>✦</span></span>
+    <span class="marquee-item">Custom Colors <span>✦</span></span>
+    <span class="marquee-item">Handmade by Emma <span>✦</span></span>
+    <span class="marquee-item">$2 &amp; $3 Only <span>✦</span></span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div style="display:flex;justify-content:center;margin-bottom:.75rem;">
+    <svg width="60" height="60" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="ftclip"><circle cx="120" cy="120" r="103"/></clipPath></defs>
+      <circle cx="120" cy="120" r="120" fill="#00d4c8"/>
+      <circle cx="120" cy="120" r="105" fill="#0d1f2d"/>
+      <path d="M15 135 Q55 100 95 135 Q135 170 175 135 Q215 100 245 115 L245 240 L15 240 Z" fill="#00d4c8" opacity="0.18" clip-path="url(#ftclip)"/>
+      <path d="M15 135 Q55 100 95 135 Q135 170 175 135 Q215 100 245 115" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" clip-path="url(#ftclip)"/>
+      <path d="M15 152 Q55 117 95 152 Q135 187 175 152 Q215 117 245 132" fill="none" stroke="#00d4c8" stroke-width="4" stroke-linecap="round" stroke-dasharray="12,8" clip-path="url(#ftclip)"/>
+      <text x="120" y="108" font-family="Georgia,serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="2">RIPTIDE</text>
+      <text x="120" y="195" font-family="Arial,sans-serif" font-size="16" fill="#00d4c8" text-anchor="middle" letter-spacing="4">BRACELETS</text>
+    </svg>
+  </div>
+  <p>© 2025 RT Bracelets · Handmade by Emma · All rights reserved</p>
+</footer>
+
+
+<!-- ============================================================
+     STANDARD ORDER MODAL
+============================================================ -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <img class="modal-img hidden" id="modalImg" src="" alt="">
+
+    <div id="payStep">
+      <div class="modal-name" id="modalName"></div>
+      <div class="modal-price" id="modalPrice"></div>
+
+      <div class="form-row">
+        <label>Your Name</label>
+        <input type="text" id="orderName" placeholder="First & last name" />
+      </div>
+
+      <div class="form-row">
+        <label>Your Email</label>
+        <input type="email" id="orderEmail" placeholder="so Emma can reach you" />
+      </div>
+
+      <div class="modal-question">How do you want to pay?</div>
+      <div class="pay-buttons">
+        <button class="pay-btn cash" id="cashBtn" onclick="selectPay('cash')">💵 Cash</button>
+        <button class="pay-btn venmo" id="venmoBtn" onclick="selectPay('venmo')">💙 Venmo</button>
+      </div>
+      <button class="submit-btn" id="placeOrderBtn" style="margin-top:1.2rem;" onclick="placeOrder()">Place Order →</button>
+    </div>
+
+    <div class="confirm-step" id="confirmStep" style="display:none;">
+      <div class="confirm-icon" id="confirmIcon"></div>
+      <div class="confirm-title" id="confirmTitle"></div>
+      <div class="confirm-text" id="confirmText"></div>
+      <button class="back-btn" id="backBtn">← Choose differently</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     CUSTOM ORDER MODAL
+============================================================ -->
+<div class="modal-backdrop" id="customBackdrop">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCustomModal()">✕</button>
+
+    <div id="customFormWrap">
+      <div class="modal-name">Custom Bracelet ✦</div>
+      <div class="modal-price">Your design · Your colors · Your vibe</div>
+
+      <div class="form-row">
+        <label>Your Name</label>
+        <input type="text" id="customName" placeholder="First & last name" />
+      </div>
+
+      <div class="form-row">
+        <label>Your Email</label>
+        <input type="email" id="customEmail" placeholder="so Emma can reach you" />
+      </div>
+
+      <div class="form-row">
+        <label>Pick Your Colors (tap to select)</label>
+        <div class="color-swatches" id="colorSwatches">
+          <div class="swatch sel" style="background:#00d4c8" data-color="Teal" title="Teal" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#0d1f2d;border:2px solid #00d4c8" data-color="Navy" title="Navy" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#ff6b6b" data-color="Coral" title="Coral" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#ffe156" data-color="Yellow" title="Yellow" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#f4a261" data-color="Orange" title="Orange" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#c77dff" data-color="Purple" title="Purple" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#ff6b9d" data-color="Pink" title="Pink" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#52b788" data-color="Sage" title="Sage" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#ffffff;border:2px solid #444" data-color="White" title="White" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#1a1a2e;border:2px solid #555" data-color="Black" title="Black" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#3d95ce" data-color="Blue" title="Blue" onclick="toggleSwatch(this)"></div>
+          <div class="swatch" style="background:#e9c46a" data-color="Gold" title="Gold" onclick="toggleSwatch(this)"></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>Design Style</label>
+        <select id="customDesign">
+          <option value="">Choose a style...</option>
+          <option>Classic braided</option>
+          <option>Beaded</option>
+          <option>Knotted macramé</option>
+          <option>Friendship thread</option>
+          <option>Woven pattern</option>
+          <option>Mixed beads & thread</option>
+          <option>Other (describe below)</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label>Thickness</label>
+        <div class="thickness-opts">
+          <div class="thick-opt" onclick="selectThick(this)" data-val="Thin">
+            <div class="thick-line" style="width:50%;height:2px"></div>Thin
+          </div>
+          <div class="thick-opt sel" onclick="selectThick(this)" data-val="Medium">
+            <div class="thick-line" style="width:65%;height:4px"></div>Medium
+          </div>
+          <div class="thick-opt" onclick="selectThick(this)" data-val="Thick">
+            <div class="thick-line" style="width:80%;height:7px"></div>Thick
+          </div>
+          <div class="thick-opt" onclick="selectThick(this)" data-val="Chunky">
+            <div class="thick-line" style="width:90%;height:11px"></div>Chunky
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>Payment Method</label>
+        <div class="pay-buttons">
+          <button class="pay-btn cash" id="cusPayCash" onclick="selectCustomPay('cash')">💵 Cash</button>
+          <button class="pay-btn venmo" id="cusPayVenmo" onclick="selectCustomPay('venmo')">💙 Venmo</button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>Extra Details / Inspiration</label>
+        <textarea id="customNotes" placeholder="Wrist size, inspo, any other details..."></textarea>
+      </div>
+
+      <button class="submit-btn" id="customSubmitBtn" onclick="submitCustom()">Send Custom Order →</button>
+    </div>
+
+    <div class="confirm-step" id="customSuccess" style="display:none;">
+      <div class="confirm-icon">✨</div>
+      <div class="confirm-title" style="color:var(--teal)">Order Sent!</div>
+      <div class="confirm-text">Emma got your custom order and will reach out soon to nail down every detail. Get ready for your perfect bracelet! 🌊</div>
+      <button class="back-btn" onclick="closeCustomModal()">← Close</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const FORMSPREE = 'https://formspree.io/f/xnjojjrr';
+
+  /* ---- Cursor ---- */
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
+  /* ---- Scroll fade-in ---- */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.gallery-item, .step, .contact-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity .6s ease, transform .6s ease';
+    observer.observe(el);
+  });
+
+  /* ============================================================
+     STANDARD ORDER MODAL
+  ============================================================ */
+  let currentItemName  = '';
+  let currentItemPrice = '';
+  let standardPayMethod = '';
+
+  const backdrop    = document.getElementById('modalBackdrop');
+  const payStep     = document.getElementById('payStep');
+  const confirmStep = document.getElementById('confirmStep');
+
+  document.querySelectorAll('.gallery-item').forEach(el => {
+    el.addEventListener('click', () => {
+      currentItemName  = el.dataset.name  || '';
+      currentItemPrice = el.dataset.price || '';
+      document.getElementById('modalName').textContent  = currentItemName;
+      document.getElementById('modalPrice').textContent = currentItemPrice + ' · Handmade by Emma';
+      document.getElementById('orderName').value  = '';
+      document.getElementById('orderEmail').value = '';
+      standardPayMethod = '';
+      document.getElementById('cashBtn').style.opacity     = '1';
+      document.getElementById('venmoBtn').style.opacity    = '1';
+      document.getElementById('cashBtn').style.borderColor  = 'rgba(255,225,86,.3)';
+      document.getElementById('venmoBtn').style.borderColor = 'rgba(61,149,206,.3)';
+      payStep.style.display     = '';
+      confirmStep.style.display = 'none';
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModal() {
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+
+  function selectPay(method) {
+    standardPayMethod = method;
+    const cb = document.getElementById('cashBtn');
+    const vb = document.getElementById('venmoBtn');
+    if (method === 'cash') {
+      cb.style.opacity = '1'; cb.style.borderColor = 'var(--yellow)';
+      vb.style.opacity = '.45'; vb.style.borderColor = 'rgba(61,149,206,.3)';
+    } else {
+      vb.style.opacity = '1'; vb.style.borderColor = '#3d95ce';
+      cb.style.opacity = '.45'; cb.style.borderColor = 'rgba(255,225,86,.3)';
+    }
+  }
+
+  async function placeOrder() {
+    const name  = document.getElementById('orderName').value.trim();
+    const email = document.getElementById('orderEmail').value.trim();
+    if (!name)           { alert('Please enter your name!');          return; }
+    if (!email)          { alert('Please enter your email!');         return; }
+    if (!standardPayMethod) { alert('Please choose Cash or Venmo!'); return; }
+
+    const btn = document.getElementById('placeOrderBtn');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(FORMSPREE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'New Order: ' + currentItemName + ' from ' + name,
+          Name: name, Email: email,
+          Bracelet: currentItemName, Price: currentItemPrice,
+          Payment: standardPayMethod === 'cash' ? 'Cash' : 'Venmo',
+          Source: 'riptidebracelets.com'
+        })
+      });
+      if (res.ok) {
+        payStep.style.display     = 'none';
+        confirmStep.style.display = 'block';
+        const icon  = document.getElementById('confirmIcon');
+        const title = document.getElementById('confirmTitle');
+        const text  = document.getElementById('confirmText');
+        if (standardPayMethod === 'cash') {
+          icon.textContent  = '💵';
+          title.textContent = 'Cash it is!';
+          title.style.color = 'var(--yellow)';
+          text.innerHTML    = 'Sweet, <strong>' + name + '</strong>! Just find <strong>Emma</strong> at school and hand her <strong>' + currentItemPrice + ' cash</strong> for the <strong>' + currentItemName + '</strong>.<br><br>She will have it ready for you! 🎉';
+        } else {
+          icon.textContent  = '💙';
+          title.textContent = 'Venmo Order!';
+          title.style.color = '#3d95ce';
+          text.innerHTML    = 'Got it, <strong>' + name + '</strong>! Emma will reach out with her Venmo and get your <strong>' + currentItemName + '</strong> ready. 🎉';
+        }
+      } else {
+        alert('Something went wrong — please try again!');
+        btn.textContent = 'Place Order →';
+        btn.disabled = false;
+      }
+    } catch(err) {
+      alert('Something went wrong — please try again!');
+      btn.textContent = 'Place Order →';
+      btn.disabled = false;
+    }
+  }
+
+  document.getElementById('backBtn').addEventListener('click', () => {
+    confirmStep.style.display = 'none';
+    payStep.style.display     = '';
+    const btn = document.getElementById('placeOrderBtn');
+    btn.textContent = 'Place Order →';
+    btn.disabled    = false;
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); closeCustomModal(); }
+  });
+
+  /* ============================================================
+     CUSTOM ORDER MODAL
+  ============================================================ */
+  let customPayMethod = 'cash';
+  let customThickness = 'Medium';
+  const customBackdrop = document.getElementById('customBackdrop');
+
+  function openCustomModal() {
+    document.getElementById('customFormWrap').style.display = '';
+    document.getElementById('customSuccess').style.display  = 'none';
+    document.getElementById('customName').value   = '';
+    document.getElementById('customEmail').value  = '';
+    document.getElementById('customNotes').value  = '';
+    document.getElementById('customDesign').value = '';
+    customPayMethod = 'cash';
+    customThickness = 'Medium';
+    document.getElementById('cusPayCash').style.opacity  = '1';
+    document.getElementById('cusPayVenmo').style.opacity = '1';
+    customBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCustomModal() {
+    customBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  customBackdrop.addEventListener('click', e => {
+    if (e.target === customBackdrop) closeCustomModal();
+  });
+
+  function toggleSwatch(el) { el.classList.toggle('sel'); }
+
+  function selectThick(el) {
+    document.querySelectorAll('.thick-opt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
+    customThickness = el.dataset.val;
+  }
+
+  function selectCustomPay(val) {
+    customPayMethod = val;
+    document.getElementById('cusPayCash').style.opacity  = val === 'cash'  ? '1' : '.45';
+    document.getElementById('cusPayVenmo').style.opacity = val === 'venmo' ? '1' : '.45';
+  }
+
+  function getSelectedColors() {
+    return Array.from(document.querySelectorAll('#colorSwatches .swatch.sel'))
+      .map(s => s.dataset.color).join(', ') || 'Not specified';
+  }
+
+  async function submitCustom() {
+    const name  = document.getElementById('customName').value.trim();
+    const email = document.getElementById('customEmail').value.trim();
+    if (!name)  { alert('Please enter your name!');  return; }
+    if (!email) { alert('Please enter your email!'); return; }
+
+    const design = document.getElementById('customDesign').value || 'Not specified';
+    const notes  = document.getElementById('customNotes').value.trim();
+    const colors = getSelectedColors();
+
+    const submitBtn = document.getElementById('customSubmitBtn');
+    submitBtn.textContent = 'Sending…';
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch(FORMSPREE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject:     'Custom Order from ' + name,
+          Name: name, Email: email, Type: 'Custom Order',
+          Colors: colors, Design_Style: design,
+          Thickness: customThickness,
+          Payment: customPayMethod === 'cash' ? 'Cash' : 'Venmo',
+          Notes: notes || 'None',
+          Source: 'riptidebracelets.com'
+        })
+      });
+      if (res.ok) {
+        document.getElementById('customFormWrap').style.display = 'none';
+        document.getElementById('customSuccess').style.display  = 'block';
+      } else {
+        alert('Something went wrong — please try again!');
+        submitBtn.textContent = 'Send Custom Order →';
+        submitBtn.disabled = false;
+      }
+    } catch(err) {
+      alert('Something went wrong — please try again!');
+      submitBtn.textContent = 'Send Custom Order →';
+      submitBtn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
